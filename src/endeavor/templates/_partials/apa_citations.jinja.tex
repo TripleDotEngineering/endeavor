@@ -1,0 +1,19 @@
+<?ev if ref  ?>
+<?ev for key in ref._used.keys()|sort() ?>
+    <?ev set r = data['references'][key] ?>
+    <?ev if r.get('author', '') is string ?>
+        <?ev set authorRef =  r['author'] if r['author']  is string else  r['author'].split(' ')[0] ?>
+        <?ev set author = r['author'] ?>
+    <?ev else ?>
+        <?ev set authorRef = r.get('author')[0].get('family') ?>
+    <?ev endif ?>
+    <?ev if r.get('year', False) ?>
+        <?ev set year = r.get('year', '') ?>
+    <?ev else ?>
+        <?ev set year =  r.get('issued', {}).get('date-parts', [[1]])[0][0]  ?>
+    <?ev endif ?>
+    \bibitem[${{ authorRef | replace(" &"," \&") }}(${{ year }})]{${{key}}}
+        <?ev if r.get('author', '') is string ?>${{r['author'] | replace(" &"," \&") }}<?ev else ?><?ev for author in r['author'] ?>${{ author['family'] }}<?ev if author.get('given', False) ?>, ${{ author.get('given', ' ')[0] }}.<?ev endif ?>${{ ", " if not loop.last else "" }}<?ev endfor ?><?ev endif ?>
+        (${{ year }}). ${{ r['title'] | replace(" &"," \&") }}.\emph{<?ev include '_partials/publisher.jinja.tex' ?>}<?ev if r.get('url') is string ?> \url{${{ r['url'] }}}<?ev endif ?>
+<?ev endfor ?>
+<?ev endif ?>

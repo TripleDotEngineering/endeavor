@@ -1,0 +1,259 @@
+\documentclass{UCF_ETD}
+% \usepackage{times} % obsolete font package
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{mathptmx}
+\usepackage{graphicx}
+\usepackage{amsmath}
+
+%%%%%%
+% ENDEAVOR SPECIFICS
+%%%%%%
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+	colorlinks = true,
+urlcolor ={blue},
+citecolor = {blue},
+linkcolor = {blue},
+anchorcolor = {blue},
+filecolor = {blue},
+menucolor = {red},
+runcolor = {red}
+pdftitle={},
+pdfsubject={},
+pdfauthor={},
+pdfkeywords={}
+}
+\urlstyle{same}
+
+
+%%% FIGURES %%%
+
+% This forces images in the right place
+% See https://stackoverflow.com/questions/49482221/pandoc-markdown-to-pdf-image-position
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+
+\usepackage{graphicx}   % need for figures
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=0.95\maxwidth,height=0.95\maxheight,keepaspectratio}
+
+\usepackage{caption} % required for Figure labels
+\captionsetup{font=small,labelfont=bf,figurename=Fig.,labelsep=period,justification=raggedright}
+
+
+%%% CODE and TABLES %%%
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+\renewenvironment{Shaded}{\linespread{0.9}\fontfamily{cmtt}\selectfont}{}
+
+
+
+$if(tables)$
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table {\tablename ~ \thetable}
+\makeatother
+$else$
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+$endif$
+$endif$
+
+$if(indent)$
+$else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+$endif$
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+  % TABLES HERE
+$if(tables)$
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$else$
+
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+$endif$
+$endif$
+
+\usepackage{etoolbox}
+\usepackage{xstring}
+\setlength{\aboverulesep}{0pt}
+\setlength{\belowrulesep}{0pt}
+\renewcommand{\arraystretch}{1.3}
+\makeatletter
+\patchcmd{\LT@array}{\@mkpream{#2}}{\StrGobbleLeft{#2}{2}[\pream]\StrGobbleRight{\pream}{2}[\pream]\StrSubstitute{\pream}{l}{|l}[\pream]\@mkpream{@{}\pream|@{}}}{}{}
+\def\midrule{}
+\apptocmd{\LT@tabularcr}{\hline}{}{}
+\makeatother
+
+
+
+%%%%%%
+% This template is set up for all paragraphs to be flush against the left margin
+% with extra space between paragraphs. If you prefer to indent all paragraphs,
+% please read the .cls file to see which lines should be uncommented to implement indentation.
+%%%%%%%%%
+
+
+
+\title{${{ document['title'] }}} %Must be typed in all caps.
+\author{${{ document['authors'][0]['name'] }}} % typed in all caps
+
+
+<?ev if env['prev_degrees'] ?>
+\prevdegreei{
+<?ev for deg in env['prev_degrees'] ?>
+${{ deg }} \\
+<?ev endfor ?>
+}
+<?ev endif ?>
+
+%\prevdegreei{B.S. University of Central Florida, 2002}
+% commands available for
+% \prevdegreei{ }
+% \prevdegreeii{ }
+% \prevdegreeiii{ }
+
+\thesisname{${{ env['doc_type'] }}}
+% \thesisname prints out document type. Replace bracket text with dissertation for Ph.D students
+
+\degreename{${{ env['degree'] }}}
+% type out degree name here.
+
+\departmentsname{${{ env['department'] }}}
+% replace with department name if applicable.  Otherwise, do not include.
+
+%\schoolname{Kenneth G. Dixon School of Accounting}
+% replace with school name if applicable.  Otherwise, do not include.
+
+\collegename{${{ env['college'] }}}
+% replace with college name
+
+\termname{${{ env['term_name'] }}}
+% replace with semester
+
+\termyear{${{ env['term_year'] }}}
+% replace with year. Term year is also used to generate copyright year.
+
+%\advisorname{Faculty Member Name with No Titles}
+% replace with Major Professor if applicable.  Otherwise, do not include.
+
+
+\begin{document}
+
+\frontmatter
+% applies roman numerals as page numbers
+
+\maketitle
+% prints out school info as named above
+
+\copyrightpage{~${{ document['authors'][0]['name'] }}}
+% includes copyright symbol. Term year is automatically inserted before the author name.  Replace the author name with your own, but keep the tilda in place.
+
+\begin{abstract}
+${{ env['abstract'] }}
+% abstract files can be added here.  I recommend using \input over \include
+\end{abstract}
+
+<?ev if env['dedication'] ?>
+\dedication{${{ env['dedication'] }}}
+% creates vertically and horizontally centered dedication page.  If larger than a paragraph, remove the \vspace*fil commands from the dedication section in the class file.
+<?ev endif ?>
+
+<?ev if env['acknowledgements'] ?>
+\begin{acknowledgments}
+${{ env['acknowledgements'] }}
+\end{acknowledgments}
+<?ev endif ?>
+
+\tableofcontents
+
+\listoffigures
+
+\listoftables
+
+<?ev if env['glossary'] ?>
+\chapter{NOMENCLATURE}
+\begin{tabular}{ l l }
+<?ev for word, definition in env['glossary'].items() ?>
+\textbf{${{ word }}} &  ${{ definition }} \\
+<?ev endfor ?>
+\end{tabular}
+\pagebreak
+<?ev endif ?>
+
+\mainmatter
+% restarts page numbering with arabic numbers
+
+
+$body$
+
+
+<?ev if compiled['appendices'] ?>
+\appendix
+${{ compiled['appendices'] }}
+<?ev endif ?>
+
+\backmatter
+
+\begin{thebibliography}{99}
+
+<?ev if config.get('bibstyle', '') == 'apa' ?>
+<?ev include './_partials/apa_citations.jinja.tex' ?>
+<?ev elif config.get('bibstyle', '') == 'ieee' ?>
+<?ev include './_partials/ieee_citations.jinja.tex' ?>
+<?ev else ?>
+<?ev include './_partials/citations.jinja.tex' ?>
+<?ev endif ?>
+
+\end{thebibliography}
+
+\end{document}

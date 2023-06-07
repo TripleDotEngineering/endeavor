@@ -1,0 +1,442 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Based on the LaTeX source code to approximate a NIST Technical report
+%  Developed by K. Miller and available for free on Overleaf.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[12pt]{article}
+\usepackage[letterpaper,margin=0.75in]{geometry}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}   % if you want the fonts
+\usepackage{amssymb}    % if you want extra symbols
+
+% This forces images in the right place
+% See https://stackoverflow.com/questions/49482221/pandoc-markdown-to-pdf-image-position
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+\usepackage{graphicx}   % need for figures
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=0.95\maxwidth,height=0.95\maxheight,keepaspectratio}
+
+\usepackage[dvipsnames]{xcolor}
+\usepackage{bm}
+\usepackage{secdot}
+\usepackage{mathptmx}
+\usepackage{float}
+\usepackage[utf8]{inputenc}
+\usepackage{textcomp}
+\usepackage[hang,flushmargin,bottom]{footmisc} % footnote format
+\usepackage{lmodern}
+
+\usepackage{titlesec}
+\titleformat{\section}{\normalsize\bfseries}{\thesection.}{1em}{}	% required for heading numbering style
+\titleformat*{\subsection}{\normalsize\bfseries}
+
+\usepackage{tocloft}	% change typeset, titles, and format list of appendices/figures/tables
+\renewcommand{\cftdot}{}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand\cftbeforesecskip{\setlength{4pt}{}}
+\addtolength{\cftfignumwidth}{2em}
+\renewcommand{\cftfigpresnum}{\figurename\ }
+\addtolength{\cfttabnumwidth}{2em}
+\renewcommand{\cfttabpresnum}{\tablename\ }
+\setlength{\cfttabindent}{0in}    %% adjust as you like
+\setlength{\cftfigindent}{0in}
+
+\usepackage{enumitem}         % to control spacing between bullets/numbered lists
+
+\usepackage[numbers,sort&compress]{natbib} % format bibliography
+\renewcommand{\bibsection}{}
+\setlength{\bibsep}{0.0pt}
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+	colorlinks = true,
+urlcolor ={blue},
+citecolor = {.},
+linkcolor = {.},
+anchorcolor = {.},
+filecolor = {.},
+menucolor = {.},
+runcolor = {.}
+pdftitle={},
+pdfsubject={},
+pdfauthor={},
+pdfkeywords={}
+}
+\urlstyle{same}
+
+\usepackage{epstopdf} % converting EPS figure files to PDF
+
+\usepackage{fancyhdr, lastpage}	% formatting document, calculating number of pages, formatting headers
+\setlength{\topmargin}{-0.5in}
+\setlength{\headheight}{39pt}
+\setlength{\oddsidemargin}{0.25in} % originally 0.25
+\setlength{\evensidemargin}{0.0in} % originally 0.25
+\setlength{\textwidth}{6.0in}
+\setlength{\textheight}{8.25in}
+
+\usepackage{caption} % required for Figure labels
+\captionsetup{font=small,labelfont=bf,figurename=Fig.,labelsep=period,justification=raggedright}
+
+% Fix for pdfTeX warning of form: … found PDF version <1.6>, but at most version <1.5> allowed
+% https://tex.stackexchange.com/questions/52317/pdftex-warning-version-allowed
+\pdfminorversion=7
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   	CUSTOM FONT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{ \fontsize{10}{10}\selectfont ${{ env['header']['right'] }} \vspace{6pt}}
+\chead{\color{${{ env['warning_label']['color'] }}} \textbf{${{ env['warning_label']['header'] }}} \vspace{32pt}}
+\lhead{ \fontsize{10}{10}\selectfont ${{ env['header']['left'] }} \vspace{6pt}}
+\lfoot{\color{Gray} \vspace{2pt} \fontsize{10}{10}\selectfont Copyright \copyright \hspace{4pt} \the\year{} ${{ env['copyright'] }}}
+\cfoot{\vspace{24pt} \color{${{ env['warning_label']['color'] }}} \textbf{${{ env['warning_label']['footer'] }}}}
+\rfoot{\vspace{2pt} \thepage}
+
+\renewcommand{\headrulewidth}{0.05px}
+\renewcommand{\footrulewidth}{0.05px}
+
+%
+%
+
+\newcommand{\MONTH}{
+  \ifcase\the\month
+  \or January % 1
+  \or February % 2
+  \or March % 3
+  \or April % 4
+  \or May % 5
+  \or June % 6
+  \or July % 7
+  \or August % 8
+  \or September % 9
+  \or October % 10
+  \or November % 11
+  \or December % 12
+  \fi}
+
+%%% CODE and TABLES %%%
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+
+$if(tables)$
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table {\tablename ~ \thetable}
+\makeatother
+$else$
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+$endif$
+$endif$
+
+
+%%%%%%%%%%% !!!!!! REQUIRED - FILL OUT METADATA HERE !!!!!!!! %%%%%%%%%%%%%%
+%  	Report Number - fill in Report Number sent to you (see info below)
+%   DOI Statement - fill in DOI sent to you
+%   Month Year - fill in Month and Year of Publication
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\newcommand{\pubnumber}{XXXX}
+%\newcommand{\DOI}{https://doi.org/10.6028/NIST.HB.XXXX}
+<?ev if document['date'] ?>
+\newcommand{\monthyear}{${{ document['date'] }}}
+<?ev else ?>
+\newcommand{\monthyear}{\MONTH   \the\year{}}
+<?ev endif  ?>
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   	HEAD.tex
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% change background color for inline code in
+% markdown files. The following code does not work well for
+% long text as the text will exceed the page boundary
+\definecolor{bgcolor}{HTML}{EFEFEF}
+\definecolor{bordercolor}{HTML}{D8D8D8}
+
+\let\oldtexttt\texttt
+
+\renewcommand{\texttt}[1]{
+  %\colorbox{bgcolor}{\oldtexttt{#1}}
+  \fbox{\oldtexttt{#1}}
+}
+
+\renewcommand\fbox{
+    \fcolorbox{bordercolor}{bgcolor}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   	CUSTOM TEMPLATE STUFF
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+$if(indent)$
+$else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+$endif$
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%\setlength{\cftbeforetoctitleskip}{1in}
+%\setlength{\cftbeforelottitleskip}{1in}
+%\setlength{\cftbeforeloftitleskip}{1in}
+
+% TABLES HERE
+$if(tables)$
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$else$
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+$endif$
+$endif$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   	BEGIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+	\urlstyle{rm} % Format style of \url
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Cover Page is REQUIRED and must contain the information
+%	displayed here, at a minimum. Additional artwork may be included
+%	(e.g., official project/conference logo, etc.).
+%	Pub Number automated based on metadata
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{titlepage}
+\end{titlepage}
+
+\begin{titlepage}
+
+<?ev if env.get('warning_label', {}).get('cover', False) ?>
+%\begin{center}
+\large{\color{${{ env['warning_label']['color'] }}} \textbf{${{ env['warning_label']['cover'] }}}} \vspace{14pt} \\
+\small{\color{${{ env['warning_label']['color'] }}} ${{ env['warning_label'].get('cover_detail', '') }}}
+%\end{center}
+<?ev else ?>
+\vfill
+<?ev endif ?>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	Title Page is REQUIRED
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{flushleft}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Publication Series & Number - automated
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\includegraphics[width=0.35\linewidth]{${{ env['logo'] }}}
+\vfill
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	Title
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\rule{6in}{2pt}\\
+\vspace{12pt}
+\Huge{\textbf{${{ document['title'] }}}}\\
+<?ev if document['subtitle'] ?>
+\vspace{12pt}\Large{${{ document['subtitle']}}}\\
+<?ev endif ?>
+\rule{6in}{2pt}\\
+\vfill
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%	Author Order and Grouping. Always identify the primary author/creator first (s/he does not have to be a NIST author). For publications with multiple authors, group authors by their organizational affiliation. The organizational groupings and the names within each grouping should generally be ordered by decreasing level of contribution.
+%	For non-NIST authors, list their city and state below their organization name.
+%	For NIST authors, include the Division and Laboratory names (but do not include their city and state).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<?ev for author in document['authors'] ?>
+\normalsize \textbf{${{ author['name'] }}}\\
+<?ev if author['title'] ?>
+\textit{${{ author["title"]}}}\\
+<?ev endif ?>
+<?ev if author['organization'] ?>
+\text{${{ author["organization"]}}}\\
+<?ev endif ?>
+<?ev if author['email'] ?>
+{\fontfamily{pcr}\selectfont ${{ author["email"] }}} \\
+<?ev endif ?>
+\vspace{12pt}
+<?ev endfor ?>
+\vfill
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   DOI Statement - automated
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\normalsize This publication is available free of charge from:\\
+%\DOI\\
+%\vfill
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Date - Month and Year - automated
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\normalsize \monthyear
+\vfill
+
+<?ev if document['revision'] ?>
+\normalsize ${{ document['revision'] }}
+\vfill
+<?ev endif ?>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Department of Commerce & NIST Leadership
+%	will be updated as changes occur
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\footnotesize ${{ env['title_footnote'] }}
+%\textit{Gina M. Raimondo, Secretary}\\
+%\vspace{10pt}
+%National Institute of Standards and Technology\\
+%\textit{James K. Olthoff, Performing the Non-Exclusive Functions and Duties of the Under Secretary of Commerce for Standards and Technology \& Director, National Institute of Standards and Technology}
+
+\end{flushleft}
+\end{titlepage}
+\begin{titlepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Disclaimer/CODEN page - required
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\begin{flushright}
+%\footnotesize  Certain commercial entities, equipment, or materials may be identified in this document in order to describe an experimental procedure or concept adequately. Such identification is not intended to imply recommendation or endorsement by the National Institute of Standards and Technology, nor is it intended to imply that the entities, materials, or equipment are necessarily the best available for the purpose.\\
+%
+%\vfill
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   This secton automated - do not change
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%\normalsize \textbf{National Institute of Standards and Technology Handbook \pubnumber\\
+%Natl. Inst. Stand. Technol. Handbook \pubnumber, \pageref{LastPage} pages (\monthyear)} \\
+%\vspace{12pt}
+%\textbf{This publication is available free of charge from: \DOI}
+%\vfill
+%\end{flushright}
+\end{titlepage}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Start front matter - page number starts with "i"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{roman}
+
+
+<?ev if env['executive_summary'] ?>
+\section*{Executive Summary}
+\normalsize ${{ env['executive_summary'] }}
+\pagebreak
+<?ev endif ?>
+
+<?ev if env['foreward'] ?>
+\section*{Foreward}
+\normalsize ${{ env['foreward'] }}
+\pagebreak
+<?ev endif ?>
+
+<?ev if env['preface'] ?>
+\section*{Preface}
+\normalsize ${{ env['preface'] }}
+\pagebreak
+<?ev endif ?>
+
+<?ev if env['acknowledgements'] ?>
+\section*{Acknowledgements}
+\normalsize ${{ env['acknowledgements'] }}
+\pagebreak
+<?ev endif ?>
+
+
+%\section*{Abstract}
+%\normalsize Required\\
+%\section*{Key words}
+%\normalsize Required, alphabetized, separated by semicolon, and end in a period.\\
+%\pagebreak
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Table of Contents is required
+% 	List of Tables & Figures required if more than 5 tables/figures
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+<?ev if config['toc'] is not defined or config['toc'] == True  ?>
+\begin{center}
+\tableofcontents
+\listoftables
+\listoffigures
+\end{center}
+\pagebreak
+<?ev endif ?>
+
+<?ev if document['glossary'] ?>
+\section*{Glossary}
+\begin{tabular}{ l l }
+<?ev for word, definition in document['glossary'].items() ?>
+\textbf{${{ word }}} &  ${{ definition }} \\
+<?ev endfor ?>
+\end{tabular}
+\pagebreak
+<?ev endif ?>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   Start body of text - page number starts with "1"
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\pagenumbering{arabic}
+$body$
+
+\end{document}

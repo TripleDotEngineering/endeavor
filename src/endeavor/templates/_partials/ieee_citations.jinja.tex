@@ -1,0 +1,7 @@
+<?ev for key in ref._used.keys() ?>
+<?ev set r = data['references'][key] ?>
+<?ev set year = r.get('issued', {}).get('date-parts', [[0]])[0][0] ?>
+\bibitem{${{key}}}
+    <?ev for author in r['author'] ?>${{ " and" if loop.last and loop.length > 1 else "" }} <?ev if author['given'] ?>${{ author.get('given', ' ')[0] + '.' }} <?ev endif ?>${{ author['family'] }}${{ ", " if not loop.last and loop.length > 2 else "" }}<?ev endfor ?>,
+    "${{ r['title'] | replace(" &"," \&") }}", <?ev include '_partials/publisher.jinja.tex' ?> <?ev if year ?>${{ year }}. <?ev endif ?><?ev if r['url'] ?>\url{${{ r['url'] }}}<?ev elif r['URL'] ?>\url{${{ r['URL'] }}}<?ev endif ?>
+<?ev endfor ?>

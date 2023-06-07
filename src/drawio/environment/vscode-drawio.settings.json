@@ -1,0 +1,51 @@
+{
+    "hediet.vscode-drawio.customColorSchemes": [
+        [
+            {"fill": "#99CCFF", "stroke": "#333"},
+            {"fill": "#ccff99", "stroke": "#333"},
+            {"fill": "#ffff99", "stroke": "#333"},
+            {"fill": "#ff9999", "stroke": "#333"},
+            {"fill": "#99ffff", "stroke": "#333"},
+            {"fill": "#ffcc99", "stroke": "#333"},
+            {"fill": "#ff99cc", "stroke": "#333"},
+            {"fill": "#cc99ff", "stroke": "#333"}
+        ],
+        [
+            {"fill": "#ffb3ba", "stroke": "none"},
+            {"fill": "#ffdfba", "stroke": "none"},
+            {"fill": "#ffffba", "stroke": "none"},
+            {"fill": "#baffc9", "stroke": "none"},
+            {"fill": "#99CCFF", "stroke": "none"},
+            {"fill": "#eecbff", "stroke": "none"},
+            {"fill": "#a2798f", "stroke": "none"},
+            {"fill": "#8caba8", "stroke": "none"}
+        ]
+    ],
+    "hediet.vscode-drawio.customLibraries": [
+        {
+            "file": "/Users/jdk/Documents/repos/tripledot/endeavor/src/drawio/mxlibraries/tde-arch.mxlibrary.xml",
+            "entryId": "tde-arch",
+            "libName": "TripleDot :: Architecture"
+        },
+        {
+            "file": "/Users/jdk/Documents/repos/tripledot/endeavor/src/drawio/mxlibraries/tde-behavior.mxlibrary.xml",
+            "entryId": "tde-behavior",
+            "libName": "TripleDot :: Behavior"
+        }
+    ],
+    "hediet.vscode-drawio.presetColors": [
+        "9E9E9E", "44546A", "2196F3", "00B8D3", "009688", "64DD17", "C6FF00", "FFD600", "F57C00", "B71C1C", "C51161", "673AB7",
+        "e1e1e1", "617897", "2fd6ff", "00ffff", "00d6c2", "8eff20", "ffff00", "ffff00", "ffb100", "ff2828", "ff188a", "9352ff",
+        "5e5e5e", "28323f", "135a91", "006e7e", "005a51", "3c840d", "769900", "998000", "934a00", "6d1010", "760a3a", "3d226d",
+    ],
+    "hediet.vscode-drawio.defaultEdgeStyle": {
+        "edgeStyle": "orthogonalEdgeStyle",
+        "endArrow=block",
+        "elbow": "vertical",
+        "startArrow": "none",
+        "endFill": "1",
+        "strokeColor": "#000000",
+        "rounded": "0",
+        "fontColor": "#000000"
+    }
+}

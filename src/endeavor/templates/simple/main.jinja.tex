@@ -1,0 +1,245 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Simple Doc Template
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<?ev set fontSize = config.get("font_size", 12) ?>
+\documentclass[${{ fontSize }}pt]{article}
+\usepackage[margin=${{ config.get('margin', '1.0in') }}]{geometry}
+
+% Handles font encoding issues
+\usepackage[T1]{fontenc}
+
+\usepackage[${{ config.get('natbib', '') }}]{natbib}
+% \bibliographystyle{apalike}
+% \bibliographystyle{abbrvnat}
+%\setcitestyle{authoryear,open={((},close={))}} %Citation-related commands
+% \bibliography{./assets/refs}
+% \bibliographystyle{apalike}
+\newcommand{\bibTitle}[1]{``#1''}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}   % if you want the fonts
+\usepackage{amssymb}    % if you want extra symbols
+
+% This forces images in the right place
+% See https://stackoverflow.com/questions/49482221/pandoc-markdown-to-pdf-image-position
+\usepackage{float}
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+    \expandafter\origfigure\expandafter[H]
+} {
+    \endorigfigure
+}
+
+\usepackage{graphicx}   % need for figures
+\makeatletter
+\def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
+\def\maxheight{\ifdim\Gin@nat@height>\textheight\textheight\else\Gin@nat@height\fi}
+\makeatother
+% Scale images if necessary, so that they will not overflow the page
+% margins by default, and it is still possible to overwrite the defaults
+% using explicit options in \includegraphics[width, height, ...]{}
+\setkeys{Gin}{width=0.95\maxwidth,height=0.95\maxheight,keepaspectratio}
+
+
+
+\usepackage{enumitem}         % to control spacing between bullets/numbered lists
+
+\usepackage[hidelinks]{hyperref}
+\hypersetup{
+	colorlinks = true,
+    urlcolor ={blue},
+    citecolor = {blue},
+    linkcolor = {blue},
+    anchorcolor = {blue},
+    filecolor = {blue},
+    menucolor = {red},
+    runcolor = {red}
+    pdftitle={},
+    pdfsubject={},
+    pdfauthor={},
+    pdfkeywords={}
+}
+\urlstyle{same}
+
+% formatting document, calculating number of pages, formatting headers
+%\usepackage{fancyhdr, lastpage}
+%\setlength{\topmargin}{-0.5in}
+%\setlength{\oddsidemargin}{0.25in}
+%\setlength{\evensidemargin}{0.25in}
+%\setlength{\textwidth}{6.0in}
+%\setlength{\textheight}{8.25in}
+
+
+\usepackage{caption} % required for Figure labels
+\captionsetup{font=small,labelfont=bf,figurename=Fig.,labelsep=period,justification=raggedright}
+
+% Fix for pdfTeX warning of form: … found PDF version <1.6>, but at most version <1.5> allowed
+% https://tex.stackexchange.com/questions/52317/pdftex-warning-version-allowed
+\pdfminorversion=7
+
+\usepackage{tocloft}	% change typeset, titles, and format list of appendices/figures/tables
+\renewcommand{\cftdot}{}
+\renewcommand{\contentsname}{Table of Contents}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftdotsep}} % for parts
+\renewcommand{\cftsecleader}{\cftdotfill{\cftdotsep}}
+\renewcommand\cftbeforesecskip{\setlength{4pt}{}}
+\addtolength{\cftfignumwidth}{2em}
+\renewcommand{\cftfigpresnum}{\figurename\ }
+\addtolength{\cfttabnumwidth}{2em}
+\renewcommand{\cfttabpresnum}{\tablename\ }
+\setlength{\cfttabindent}{0in}    %% adjust as you like
+\setlength{\cftfigindent}{0in}
+
+\usepackage{longtable}
+
+%%% CODE and TABLES %%%
+
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
+
+
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table {\tablename ~ \thetable}
+\makeatother
+$else$
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+$endif$
+
+$if(indent)$
+$else$
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+$endif$
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+
+%\setlength{\cftbeforetoctitleskip}{1in}
+%\setlength{\cftbeforelottitleskip}{1in}
+%\setlength{\cftbeforeloftitleskip}{1in}
+
+% TABLES HERE
+$if(tables)$
+\usepackage{longtable,booktabs}
+$if(beamer)$
+\usepackage{caption}
+% Make caption package work with longtable
+\makeatletter
+\def\fnum@table{\tablename~\thetable}
+\makeatother
+$else$
+
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+$endif$
+$endif$
+
+% Format section / subsection titles
+% Use \bfseries at end to make bold
+% e.g. {}\normalfont\fontsize{14}{17}\bfseries}
+<?ev set bold = '' ?>
+<?ev if config.get('bold_titles', '') ==  True ?>
+<?ev set bold = '\\bfseries' ?>
+<?ev endif ?>
+\usepackage{titlesec}
+\titleformat{\section}
+  {\normalfont\fontsize{${{ fontSize + 4}}}{17}${{ bold }}}{\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\fontsize{${{ fontSize + 2}}}{15}${{ bold }}}{\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\fontsize{${{ fontSize + 2 }}}{15}${{ bold }}\selectfont}{\thesubsubsection}{1em}{}
+
+<?ev if config['double_spaced'] == True ?>
+\usepackage{setspace}
+\doublespacing
+<?ev endif ?>
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%   	BEGIN DOCUMENT
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\begin{flushright}
+<?ev if config.get('author_placement', 'top-right') == 'top-right' ?>
+<?ev for author in document['authors'] ?>
+${{ author['name'] }}
+<?ev endfor ?>
+<?ev endif ?>
+<?ev for line in env['header_lines'] ?>
+${{ line }}
+<?ev endfor ?>
+\end{flushright}
+
+\begin{center}
+<?ev if config.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
+${{ config.get('title_size_command', '\\normalsize') }}{${{ document['title'] }}}\\
+<?ev if document.get('subtitle', False) ?>
+\hfill \\
+${{ config.get('subtitle_size_command', '\\normalsize') }}{${{ document['subtitle'] }}}\\
+<?ev endif ?>
+<?ev if config.get('author_placement', None) == 'center' ?>
+\hfill \\
+<?ev for author in document['authors'] ?>
+${{ config.get('author_size_command', '\\normalsize') }}{${{ author['name'] }}}
+<?ev endfor ?> \\
+<?ev if config.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
+<?ev endif ?>
+\end{center}
+\thispagestyle{empty}
+
+<?ev if config.get('title_page', False) ?>
+\clearpage
+\pagenumbering{arabic}
+<?ev endif ?>
+
+$body$
+
+<?ev if config.get('references', True) ?>
+\begin{thebibliography}{9}
+
+<?ev if config.get('bibstyle', '') == 'apa' ?>
+    <?ev include './_partials/apa_citations.jinja.tex' ?>
+<?ev elif config.get('bibstyle', '') == 'ieee' ?>
+    <?ev include './_partials/apa_citations.jinja.tex' ?>
+<?ev else ?>
+<?ev include './_partials/citations.jinja.tex' ?>
+<?ev endif ?>
+
+\end{thebibliography}
+<?ev endif ?>
+
+
+<?ev if compiled['appendices'] ?>
+\appendix
+
+${{ compiled['appendices'] }}
+<?ev endif ?>
+
+
+
+\end{document}

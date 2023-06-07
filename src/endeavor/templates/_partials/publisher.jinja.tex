@@ -1,0 +1,2 @@
+<?ev if r['publication']?> ${{ r['publication'] | replace(" &"," \&") }}.
+<?ev elif r['container-title']?> ${{ r['container-title'] | replace(' & ', ' \\& ') }}.<?ev endif?>
