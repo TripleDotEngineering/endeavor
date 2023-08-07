@@ -3,10 +3,10 @@ import json
 import os
 import shutil
 import subprocess
-import yaml
 import rich
 from .document_yaml import Document
-from .jinja_tools import render, render_from_string, render_markdown_from_string
+from .jinja_tools import render_from_string, render_markdown_from_string
+from .logo import print_header
 
 BUILD_DIR = os.path.join('build', 'endeavor')
 HIGHLIGHT_STYLE = os.path.join(os.path.dirname(__file__), 'static', 'custom.theme')
@@ -16,8 +16,10 @@ def main():
     # Parse CLI args
     args = cli_parser().parse_args()
     rich.print('[bold yellow]' + '='*79 + '[/bold yellow]')
-    print('  Starting document generation ...')
+    print_header()
     rich.print('[bold yellow]' + '='*79 + '[/bold yellow]')
+
+    rich.print('\n[bold]### [cyan]VALIDATION[/cyan] ###[/bold]\n')
 
     ############################################################################
     # Load the document configuration
@@ -97,11 +99,11 @@ def main():
                 return self.__getattribute__(key)
 
         refs = Refs()
-        for key, val in vars['data'].get('references', {}).items():
+        for key, val in vars['env'].get('references', {}).items():
             #def func(self):
             #    self._used[key] = True
             #    return '$\\text{{\\cite{{{key}}}}}$'
-            cite_cmd = vars['config'].get('cite_command', 'cite')
+            cite_cmd = vars['env'].get('cite_command', 'cite')
             setattr(refs, key, f'${{\\text{{\\{cite_cmd}{{{key}}}}}}}$')
             setattr(refs, key, Ref(cite_cmd, key))
         vars['ref'] = refs
@@ -116,7 +118,6 @@ def main():
             vars['env'][key] = os.path.abspath(os.path.join(docgen_root, val))
     #print('OK')
 
-
     ############################################################################
     ## COMPILE
     ############################################################################
@@ -126,7 +127,6 @@ def main():
     # Compile the appendices Markdown to Tex
     ############################################################################
     rich.print('  [bold green]+[/bold green] Compiling appendices ...')
-    rich.print('  [bold green]+[/bold green] Compiling Markdown blob ...')
     with open(f"./{BUILD_DIR}/ev-partials_appendices.md", 'w') as f:
         appendices = docgen_yaml.get("document", {}).get('appendices', [])
         if appendices is None:
@@ -177,10 +177,14 @@ def main():
     ############################################################################
     # Build the final document with Pandoc
     ############################################################################
+    rich.print('\n[bold]### [cyan]DOCUMENT GENERATION[/cyan] ###[/bold]\n')
     rich.print('  [bold green]+[/bold green] Compiling final output document with PanDoc ...')
     doc_name =  make_document_title(docgen_yaml)
-    result = make_doc('index.md', doc_name, format=args.output_type, vars=vars, debug=args.debug)
-    rich.print('[green]Complete[/green].')
+    make_doc('index.md', doc_name, format=args.output_type, vars=vars, debug=args.debug)
+
+    # Print completion message
+    spacer = '-'*32
+    rich.print(f'\n[bold]+{spacer}[ [green]COMPLETE[/green] ]{spacer}+[/bold]')
 
 
 def compile_template(docgen_yaml, vars):
@@ -211,7 +215,6 @@ def make_document_title(docgen_yaml):
     return result
 
 
-
 def make_doc(input_file, document_name, format='pdf', use_template=True, vars=None, debug=False):
     if format not in ['pdf', 'tex', 'md']:
         raise Exception(f'Invalid output format: {format}')
@@ -236,11 +239,22 @@ def make_doc(input_file, document_name, format='pdf', use_template=True, vars=No
         {geometry} {mermaid_filter} {shift_headings} \
         -o ./{document_name}.{format}
     """
+    #pandoc_args = f"""./{input_file} \
+    #    --pdf-engine pdflatex \
+    #    {template} \
+    #    {chapters} \
+    #    {geometry} {shift_headings} \
+    #    -o ./{document_name}.{format}
+    #"""
     cmd = f"pandoc {pandoc_args}"
     #print('Running pandoc command ...')
     #print(cmd)
-    rich.print(f'  [bold green]+[/bold green] Running PanDoc: [dim white]{cmd}[/dim white]')
-    subprocess.run(cmd, shell=True, check=True, cwd=f"./{BUILD_DIR}", capture_output=hide_output)  # cwd=None
+    rich.print(f'  [bold green]+[/bold green] Running PanDoc ...')
+    if debug:
+        rich.print(f'  [bold green]+[/bold green] Pandoc Cmd: [dim white]{cmd}[/dim white]')
+    p = subprocess.run(cmd, shell=True, check=True, cwd=f"./{BUILD_DIR}")  # cwd=None
+    if p.stdout is not None:
+        print(p.stdout)
 
 
 def has_mermaid_filter():
@@ -250,7 +264,7 @@ def has_mermaid_filter():
 
 def cli_parser():
     parser = argparse.ArgumentParser()
-    parser.add_argument('--debug', action='store_true', help="enable debug mode")
+    parser.add_argument('--debug', action='store_true', default=False, help="enable debug mode")
     parser.add_argument('document', help="the docgen.yaml")
     parser.add_argument('--output-type', default="pdf", help="the docgen.yaml")
     return parser

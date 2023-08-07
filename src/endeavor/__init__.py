@@ -1,1 +1,3 @@
-version = "1.0.0-beta-rc1"
+from .__metadata__ import __version__
+
+version = __version__

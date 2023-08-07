@@ -1,14 +1,17 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Simple Doc Template
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-<?ev set fontSize = config.get("font_size", 12) ?>
+<?ev set fontSize = env.get("font_size", 12) ?>
 \documentclass[${{ fontSize }}pt]{article}
-\usepackage[margin=${{ config.get('margin', '1.0in') }}]{geometry}
+\usepackage[margin=${{ env.get('margin', '1.0in') }}]{geometry}
+<?ev if env.get('font_package', False) ?>
+\usepackage{${{ env.get('font_package', '') }}}
+<?ev endif ?>
 
 % Handles font encoding issues
 \usepackage[T1]{fontenc}
 
-\usepackage[${{ config.get('natbib', '') }}]{natbib}
+\usepackage[${{ env.get('natbib', '') }}]{natbib}
 % \bibliographystyle{apalike}
 % \bibliographystyle{abbrvnat}
 %\setcitestyle{authoryear,open={((},close={))}} %Citation-related commands
@@ -163,7 +166,7 @@ $endif$
 % Use \bfseries at end to make bold
 % e.g. {}\normalfont\fontsize{14}{17}\bfseries}
 <?ev set bold = '' ?>
-<?ev if config.get('bold_titles', '') ==  True ?>
+<?ev if env.get('bold_titles', '') ==  True ?>
 <?ev set bold = '\\bfseries' ?>
 <?ev endif ?>
 \usepackage{titlesec}
@@ -174,10 +177,12 @@ $endif$
 \titleformat{\subsubsection}
   {\normalfont\fontsize{${{ fontSize + 2 }}}{15}${{ bold }}\selectfont}{\thesubsubsection}{1em}{}
 
-<?ev if config['double_spaced'] == True ?>
+<?ev if env.get('double_spaced', False) == True ?>
 \usepackage{setspace}
 \doublespacing
 <?ev endif ?>
+
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %   	BEGIN DOCUMENT
@@ -185,7 +190,7 @@ $endif$
 \begin{document}
 
 \begin{flushright}
-<?ev if config.get('author_placement', 'top-right') == 'top-right' ?>
+<?ev if env.get('author_placement', 'top-right') == 'top-right' ?>
 <?ev for author in document['authors'] ?>
 ${{ author['name'] }}
 <?ev endfor ?>
@@ -196,35 +201,39 @@ ${{ line }}
 \end{flushright}
 
 \begin{center}
-<?ev if config.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
-${{ config.get('title_size_command', '\\normalsize') }}{${{ document['title'] }}}\\
+<?ev if env.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
+${{ env.get('title_size_command', '\\normalsize') }}{${{ document['title'] }}}\\
 <?ev if document.get('subtitle', False) ?>
 \hfill \\
-${{ config.get('subtitle_size_command', '\\normalsize') }}{${{ document['subtitle'] }}}\\
+${{ env.get('subtitle_size_command', '\\normalsize') }}{${{ document['subtitle'] }}}\\
 <?ev endif ?>
-<?ev if config.get('author_placement', None) == 'center' ?>
+<?ev if env.get('author_placement', None) == 'center' ?>
 \hfill \\
 <?ev for author in document['authors'] ?>
-${{ config.get('author_size_command', '\\normalsize') }}{${{ author['name'] }}}
+${{ env.get('author_size_command', '\\normalsize') }}{${{ author['name'] }}}
 <?ev endfor ?> \\
-<?ev if config.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
+<?ev if document.get('title_footer', False) ?>
+\hfill \\
+${{ env.get('title_footer_size_command', '\\normalsize') }}{${{ document['title_footer'] }}}\\
+<?ev endif ?>
+<?ev if env.get('title_vfill', False) ?>\vfill<?ev else ?>\hfill \\<?ev endif ?>
 <?ev endif ?>
 \end{center}
 \thispagestyle{empty}
 
-<?ev if config.get('title_page', False) ?>
+<?ev if env.get('title_page', False) ?>
 \clearpage
 \pagenumbering{arabic}
 <?ev endif ?>
 
 $body$
 
-<?ev if config.get('references', True) ?>
+<?ev if env.get('references', False) ?>
 \begin{thebibliography}{9}
 
-<?ev if config.get('bibstyle', '') == 'apa' ?>
+<?ev if env.get('bibstyle', '') == 'apa' ?>
     <?ev include './_partials/apa_citations.jinja.tex' ?>
-<?ev elif config.get('bibstyle', '') == 'ieee' ?>
+<?ev elif env.get('bibstyle', '') == 'ieee' ?>
     <?ev include './_partials/apa_citations.jinja.tex' ?>
 <?ev else ?>
 <?ev include './_partials/citations.jinja.tex' ?>

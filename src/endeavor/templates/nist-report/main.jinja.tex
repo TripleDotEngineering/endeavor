@@ -8,6 +8,7 @@
 \usepackage{amsmath}
 \usepackage{amsfonts}   % if you want the fonts
 \usepackage{amssymb}    % if you want extra symbols
+% \usepackage{array,calc}
 
 % This forces images in the right place
 % See https://stackoverflow.com/questions/49482221/pandoc-markdown-to-pdf-image-position
@@ -107,10 +108,10 @@ pdfkeywords={}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{ \fontsize{10}{10}\selectfont ${{ env['header']['right'] }} \vspace{6pt}}
-\chead{\color{${{ env['warning_label']['color'] }}} \textbf{${{ env['warning_label']['header'] }}} \vspace{32pt}}
+\chead{\color{${{ env.get('warning_label', {}).get('color', 'red') }}} \textbf{${{ env.get('warning_label', {}).get('header', '') }}} \vspace{32pt}}
 \lhead{ \fontsize{10}{10}\selectfont ${{ env['header']['left'] }} \vspace{6pt}}
 \lfoot{\color{Gray} \vspace{2pt} \fontsize{10}{10}\selectfont Copyright \copyright \hspace{4pt} \the\year{} ${{ env['copyright'] }}}
-\cfoot{\vspace{24pt} \color{${{ env['warning_label']['color'] }}} \textbf{${{ env['warning_label']['footer'] }}}}
+\cfoot{\vspace{24pt} \color{${{ env.get('warning_label', {}).get('color', 'red') }}} \textbf{${{ env.get('warning_label', {}).get('footer', '') }}}}
 \rfoot{\vspace{2pt} \thepage}
 
 \renewcommand{\headrulewidth}{0.05px}
@@ -438,5 +439,15 @@ $endif$
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \pagenumbering{arabic}
 $body$
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  Appendices
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+<?ev if compiled['appendices'] ?>
+\appendix
+
+${{ compiled['appendices'] }}
+<?ev endif ?>
 
 \end{document}
