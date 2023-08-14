@@ -415,7 +415,7 @@ $endif$
 % 	List of Tables & Figures required if more than 5 tables/figures
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-<?ev if config['toc'] is not defined or config['toc'] == True  ?>
+<?ev if env['toc'] is not defined or env['toc'] == True  ?>
 \begin{center}
 \tableofcontents
 \listoftables
