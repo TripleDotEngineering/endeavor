@@ -182,6 +182,10 @@ $endif$
 \doublespacing
 <?ev endif ?>
 
+% Left align footnotes
+\usepackage[hang,flushmargin]{footmisc}
+%\setlength{\footnotemargin}{1.0em}
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -228,9 +232,10 @@ ${{ env.get('title_footer_size_command', '\\normalsize') }}{${{ document['title_
 
 $body$
 
-<?ev if env.get('references', False) ?>
-\begin{thebibliography}{9}
 
+<?ev if env.get('references', False) ?>
+\begin{flushleft}
+\begin{thebibliography}{9}
 <?ev if env.get('bibstyle', '') == 'apa' ?>
     <?ev include './_partials/apa_citations.jinja.tex' ?>
 <?ev elif env.get('bibstyle', '') == 'ieee' ?>
@@ -238,8 +243,8 @@ $body$
 <?ev else ?>
 <?ev include './_partials/citations.jinja.tex' ?>
 <?ev endif ?>
-
 \end{thebibliography}
+\end{flushleft}
 <?ev endif ?>
 
 

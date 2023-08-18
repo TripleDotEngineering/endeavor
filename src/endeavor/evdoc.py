@@ -65,7 +65,7 @@ def main():
     # Make quick refs
     ############################################################################
     rich.print('  [bold green]+[/bold green] Compiling references ...')
-    if 'references' in vars['data'].keys():
+    if 'references' in vars['env'].keys():
         class Ref:
             def __init__(self, citecmd, key):
                 self.cmd = citecmd
@@ -107,6 +107,7 @@ def main():
             setattr(refs, key, f'${{\\text{{\\{cite_cmd}{{{key}}}}}}}$')
             setattr(refs, key, Ref(cite_cmd, key))
         vars['ref'] = refs
+    print(vars['ref'])
     #print('OK')
 
     ############################################################################

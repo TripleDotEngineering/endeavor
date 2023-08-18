@@ -1,6 +1,6 @@
 <?ev if ref  ?>
 <?ev for key in ref._used.keys()|sort() ?>
-    <?ev set r = data['references'][key] ?>
+    <?ev set r = env['references'][key] ?>
     <?ev if r.get('author', '') is string ?>
         <?ev set authorRef =  r['author'] if r['author']  is string else  r['author'].split(' ')[0] ?>
         <?ev set author = r['author'] ?>
