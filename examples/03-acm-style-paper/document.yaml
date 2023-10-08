@@ -1,0 +1,32 @@
+endeavor:
+  version: 1.0
+  template: acm
+
+# The config section is used to enable and disable certain document
+# generation features.
+env:
+  bold_titles: true
+  double_spaced: true
+  title_page: false
+  font_size: 11
+  cite_command: citep
+  natbib: authoryear,round,sort
+  bibstyle: apa
+  author_placement: center
+  header_placement: center
+  title_vfill: true
+  title_size_command: \Huge
+  subtitle_size_command: \LARGE
+  author_size_command: \Large
+  margin: 1.0in
+  copyright: Josh Kaplan
+  header:
+    right: ''
+    left: ''
+
+document:
+  title: A Sample Document
+  authors:
+    - name: S. Rogers
+  body:
+    - ./01-intro.md

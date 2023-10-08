@@ -107,7 +107,7 @@ def main():
             setattr(refs, key, f'${{\\text{{\\{cite_cmd}{{{key}}}}}}}$')
             setattr(refs, key, Ref(cite_cmd, key))
         vars['ref'] = refs
-    print(vars['ref'])
+    print(vars.get('ref'))
     #print('OK')
 
     ############################################################################
@@ -223,8 +223,8 @@ def make_doc(input_file, document_name, format='pdf', use_template=True, vars=No
     mermaid_filter = '-F mermaid-filter' if has_mermaid_filter() else ''
     geometry = '-V geometry:"top=2cm, bottom=5cm, left=2cm, right=2cm"'
     template =  '--template=docgen.tex' if use_template else ''
-    chapters = '--top-level-division=chapter' if vars.get('config').get('chapters') else ''
-    shift_headings = f"--shift-heading-level-by={vars.get('config').get('shift_heading')}" if vars.get('config').get('shift_heading') else ''
+    chapters = '--top-level-division=chapter' if vars.get('env').get('chapters') else ''
+    shift_headings = f"--shift-heading-level-by={vars.get('env').get('shift_heading')}" if vars.get('env').get('shift_heading') else ''
     #  --highlight-style {HIGHLIGHT_STYLE} \
     pandoc_args = f"""./{input_file} \
         --pdf-engine pdflatex \
