@@ -101,3 +101,13 @@ It should do the following:
 ## Status
 
 - We're beginning with document generation with embedded diagrams.
+
+# License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE.md) file for details.
+
+Endeavor's [LaTeX templates](/src/endeavor/templates) are derived from freely
+available templates on Overleaf. Templates are copyright their respective
+authors and may fall under their own licenses. Some minor modifcations have
+been made to support Endeavor's templating system. All notices in the original
+templates have been retained.

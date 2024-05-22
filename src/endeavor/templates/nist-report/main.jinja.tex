@@ -10,6 +10,19 @@
 \usepackage{amssymb}    % if you want extra symbols
 % \usepackage{array,calc}
 
+\usepackage{listings}
+
+% Define JSON environment
+\lstnewenvironment{json}{
+    \lstset{
+        basicstyle=\small\ttfamily,
+        breaklines=true,
+        frame=single,
+        language=json
+    }
+}{}
+
+
 % This forces images in the right place
 % See https://stackoverflow.com/questions/49482221/pandoc-markdown-to-pdf-image-position
 \usepackage{float}
@@ -142,6 +155,8 @@ $if(highlighting-macros)$
 $highlighting-macros$
 $endif$
 
+\usepackage{longtable}
+\usepackage{booktabs}
 
 $if(tables)$
 \usepackage{longtable,booktabs}
