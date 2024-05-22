@@ -1,5 +1,16 @@
 # Project Endeavor
 
+> **NOTE:** This project was developed as an internal tool for generating
+> professional reports and documentation. It was always a project we hoped to
+> open source some day but never really found the time to get the code base into
+> a state where we felt that was sustainable. That said, there's been some
+> interest from others and we feel it is better to make it available and allow
+> others to contribute to the project or fork it for their own use.
+>
+> We're open to issues, pull requests, or other contributions, but our long-term
+> plan is to move away from this project and allow it to be community driven if
+> there is interest.
+
 
 <img src="./src/endeavor/static/img/endeavor-logo_128px.png"
 alt="Endeavor project logo"
